@@ -1,0 +1,4 @@
+{
+  "port": 5001,
+  "jwtSecret": "secretkey 24dsdh3"
+}
