@@ -1,10 +1,9 @@
 import express, { Application } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import config from 'config';
+import swaggerDocument from './swagger.json';
 import realtorsRouter from './api/controllers/realtors/router';
 import mailConfirmRouter from './api/controllers/mailconfirm/router';
-
-const swaggerDocument = require('./swagger.json');
 
 const app: Application = express();
 
