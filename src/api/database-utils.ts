@@ -29,11 +29,9 @@ const databaseSqlQuery = async (query: string) => {
     }
     await client.connect();
     const response = await client.query(query);
-    console.log(response);
     client.end();
     return response;
   } catch (error) {
-    console.log(error);
     return error;
   }
 };

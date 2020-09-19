@@ -1,4 +1,11 @@
 {
-  "port": 5001,
-  "jwtSecret": "secretkey 24dsdh3"
+  "mode": {
+    "local": {
+      "host": "https://realt-backend.herokuapp.com"
+    },
+    "remote": {
+      "host": "http://localhost:5001"
+    }
+  },
+  "port": 5001
 }
