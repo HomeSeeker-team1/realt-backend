@@ -17,27 +17,62 @@ router.post(
   async (req: Request, res: Response) => {
     try {
       const errors = validationResult(req);
+      const allErrors = errors.array();
+      const {
+        email,
+        password,
+        isAgency,
+        passwordRepeat,
+        name,
+        surname,
+        patronymic,
+        phone,
+      } = req.body;
+      console.log(req.body);
+
       if (!errors.isEmpty()) {
         return res.status(400).json({
-          errors: errors.array(),
-          message: 'Некорректный данные при регистрации',
+          errors: allErrors,
+          message: 'Некорректные данные при регистрации',
         });
       }
 
-      const { email, password, isAgency } = req.body;
+      if (passwordRepeat !== password) {
+        allErrors.push({
+          value: '',
+          msg: 'Пароли не совпадают',
+          param: 'password',
+          location: 'body',
+        });
+        return res.status(400).json({
+          errors: allErrors,
+          message: 'Некорректные данные при регистрации',
+        });
+      }
       const isCandidateExist = await realtors.findCandidate(email);
 
       if (isCandidateExist) {
+        allErrors.push({
+          value: '',
+          msg: 'Пользователь с таким email уже пытался зарегистрироваться.',
+          param: 'email',
+          location: 'body',
+        });
         return res.status(400).json({
-          message:
-            'Пользователь с таким email уже пытался зарегистрироваться. Послать письмо повторно?',
+          errors: allErrors,
+          message: 'Некорректные данные при регистрации',
         });
       }
 
       const candidateId = await realtors.createCandidate({
         email,
         password,
+        passwordRepeat,
         isAgency,
+        phone,
+        surname,
+        patronymic,
+        name,
       });
 
       mailer.sendConfirm(email, candidateId);
