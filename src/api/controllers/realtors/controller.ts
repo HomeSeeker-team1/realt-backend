@@ -3,10 +3,10 @@ import { IRealtor } from '../../../models/realtors';
 import databaseSqlQuery from '../../database-utils';
 
 const realtors = {
-  createCandidate: async ({ email, password, isAgency }: IRealtor) => {
+  createCandidate: async ({ email, password, agency }: IRealtor) => {
     try {
       const id = uuidv4();
-      const query = `Insert into candidates(id, email, password, agency) Values ('${id}', '${email}', '${password}', '${isAgency}')`;
+      const query = `Insert into candidates(id, email, password, agency) Values ('${id}', '${email}', '${password}', '${agency}')`;
       const res = await databaseSqlQuery(query);
       if (res.rowCount === 1) {
         return id;

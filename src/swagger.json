@@ -1,0 +1,74 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "realt backend API",
+    "description": "realt backend",
+    "version": "1.0.0"
+  },
+  "host": "https://realt-backend.herokuapp.com",
+  "basePath": "",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/realtors": {
+      "post": {
+        "summary": "create new realtor",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "realtor",
+            "schema": {
+              "$ref": "#/definitions/Realtor"
+            }
+          }
+        ],
+        "description": "",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Realtor": {
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "passwordRepeat": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "agency": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "email",
+        "password",
+        "passwordRepeat",
+        "agency"
+      ]
+    }
+  }
+}

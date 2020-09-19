@@ -12,7 +12,7 @@ router.post(
     check('password', 'Минимальная длина пароля 6 символов').isLength({
       min: 6,
     }),
-    check('isAgency', 'Выберите тип аккаунта').isBoolean(),
+    check('agency', 'Выберите тип аккаунта').isBoolean(),
   ],
   async (req: Request, res: Response) => {
     try {
@@ -21,7 +21,7 @@ router.post(
       const {
         email,
         password,
-        isAgency,
+        agency,
         passwordRepeat,
         name,
         surname,
@@ -68,7 +68,7 @@ router.post(
         email,
         password,
         passwordRepeat,
-        isAgency,
+        agency,
         phone,
         surname,
         patronymic,

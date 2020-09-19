@@ -1,15 +1,20 @@
 import express, { Application } from 'express';
+import swaggerUi from 'swagger-ui-express';
 import config from 'config';
 import realtorsRouter from './api/controllers/realtors/router';
 import mailConfirmRouter from './api/controllers/mailconfirm/router';
 
+const swaggerDocument = require('./swagger.json');
+
 const app: Application = express();
+
 const port = process.env.PORT || config.get('port');
 
 // @ts-ignore
 app.use(express.json({ extended: true }));
 app.use('/', realtorsRouter);
 app.use('/', mailConfirmRouter);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const start = async () => {
   try {
