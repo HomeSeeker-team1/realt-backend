@@ -1,16 +1,15 @@
-import express, {
-  Application, Request, Response,
-} from 'express';
+import express, { Application } from 'express';
 import config from 'config';
-
-import databaseSqlQuery from './helpers/database-utils';
+import realtorsRouter from './api/controllers/realtors/router';
+import mailConfirmRouter from './api/controllers/mailconfirm/router';
 
 const app: Application = express();
 const port = process.env.PORT || config.get('port');
 
-app.use('/', (req: Request, res: Response) => {
-  res.status(200).send({ data: 'Hello from Minsk' });
-});
+// @ts-ignore
+app.use(express.json({ extended: true }));
+app.use('/', realtorsRouter);
+app.use('/', mailConfirmRouter);
 
 const start = async () => {
   try {
@@ -22,17 +21,5 @@ const start = async () => {
     process.exit(1);
   }
 };
-
-const testDataBaseRequest = async () => {
-  try {
-    const query = 'select * from my_table limit 2';
-    const res = await databaseSqlQuery(query);
-    console.log('index.ts1', res)
-  } catch (error) {
-    console.log('index.ts2', error);
-  }
-};
-
-testDataBaseRequest();
 
 start();
