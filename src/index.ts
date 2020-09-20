@@ -1,4 +1,5 @@
 import express, { Application } from 'express';
+import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import config from 'config';
 import swaggerDocument from './swagger.json';
@@ -6,6 +7,7 @@ import realtorsRouter from './api/controllers/realtors/router';
 import mailConfirmRouter from './api/controllers/mailconfirm/router';
 
 const app: Application = express();
+app.use(cors());
 
 const port = process.env.PORT || config.get('port');
 

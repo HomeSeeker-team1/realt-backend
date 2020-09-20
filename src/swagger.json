@@ -5,7 +5,7 @@
     "description": "realt backend",
     "version": "1.0.0"
   },
-  "host": "https://realt-backend.herokuapp.com",
+  "host": "realt-backend.herokuapp.com",
   "basePath": "",
   "schemes": [
     "https"

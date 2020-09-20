@@ -28,7 +28,6 @@ router.post(
         patronymic,
         phone,
       } = req.body;
-      console.log(req.body);
 
       if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -81,7 +80,7 @@ router.post(
         message: 'Письмо с подтверждением регистрации отправлено на почту',
       });
     } catch (error) {
-      console.log(error);
+      console.log('realtors router', error);
       return res.status(500).json({ message: 'Server Error' });
     }
   },
