@@ -7,12 +7,25 @@
   },
   "host": "realt-backend.herokuapp.com",
   "basePath": "",
-  "schemes": [
-    "https"
+  "tags": [
+    {
+      "name": "realtors",
+      "description": "realtors"
+    },
+    {
+      "name": "owners",
+      "description": "owners"
+    },
+    {
+      "name": "mail",
+      "description": "mail"
+    }
   ],
+  "schemes": ["https"],
   "paths": {
     "/realtors": {
       "post": {
+        "tags": ["realtors"],
         "summary": "create new realtor",
         "parameters": [
           {
@@ -24,9 +37,75 @@
           }
         ],
         "description": "",
-        "produces": [
-          "application/json"
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/owners": {
+      "post": {
+        "tags": ["owners"],
+        "summary": "create new owner",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "owner",
+            "schema": {
+              "$ref": "#/definitions/Owner"
+            }
+          }
         ],
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/mail/mailconfirm": {
+      "post": {
+        "tags": ["mail"],
+        "summary": "retry mailconfirm",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "mailconfirm",
+            "schema": {
+              "$ref": "#/definitions/Mail confirm"
+            }
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/mail/send": {
+      "post": {
+        "tags": ["mail"],
+        "summary": "send mail",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "send mail",
+            "schema": {
+              "$ref": "#/definitions/Send mail"
+            }
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
         "responses": {
           "200": {
             "description": "OK"
@@ -63,12 +142,52 @@
           "type": "boolean"
         }
       },
-      "required": [
-        "email",
-        "password",
-        "passwordRepeat",
-        "agency"
-      ]
+      "required": ["email", "password", "passwordRepeat", "agency"]
+    },
+    "Owner": {
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "passwordRepeat": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        }
+      },
+      "required": ["email", "password", "passwordRepeat"]
+    },
+    "Mail confirm": {
+      "properties": {
+        "email": {
+          "type": "string"
+        }
+      },
+      "required": ["email"]
+    },
+    "Send mail": {
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": ["email", "text"]
     }
   }
 }

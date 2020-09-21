@@ -1,5 +1,12 @@
 import nodemailer from 'nodemailer';
 import config from 'config';
+import realtors from '../controllers/realtors/controller';
+import {
+  confirmLayout,
+  anyLayout,
+  CONFIRM_TITLE,
+  STANDART_TITLE,
+} from '../../constants/mail/confirmLayout';
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -12,20 +19,52 @@ const transporter = nodemailer.createTransport({
 });
 
 const mailer = {
-  sendConfirm: async (email: string, candidateId: string) => {
-    const domen = process.env.NODE_ENV === 'develop'
-      ? config.get('mode.local.host')
-      : config.get('mode.remote.host');
-    const url = `${domen}/mailconfirm/${candidateId}`;
-    const res = await transporter.sendMail({
-      from: '"Realt 👻" <realtconfirm@gmail.com>',
-      to: email,
-      subject: 'Realt registration confirm ✔', // Subject line
-      text: 'Hello world?', // plain text body
-      html: `<b>Подтвердите регистрацию перейдя по <a href="${url}">ссылке</a></b>`, // html body
-    });
+  send: async (email: string, layout: string, title: string) => {
+    try {
+      const res = await transporter.sendMail({
+        from: '"Realt 👻" <realtconfirm@gmail.com>',
+        to: email,
+        subject: title, // Subject line
+        text: 'Hello world?', // plain text body
+        html: layout, // html body
+      });
 
-    return res;
+      return res;
+    } catch (error) {
+      throw Error;
+    }
+  },
+  async sendConfirm(email: string) {
+    try {
+      const candidateId = await realtors.findCandidate(email);
+      if (!candidateId) {
+        return false;
+      }
+
+      const domen = process.env.NODE_ENV === 'develop'
+        ? config.get('mode.local.host')
+        : config.get('mode.remote.host');
+      const url = `${domen}/mailconfirm/${candidateId}`;
+      const layout = confirmLayout(url);
+
+      const res = await this.send(email, layout, CONFIRM_TITLE);
+      return res;
+    } catch (error) {
+      throw Error;
+    }
+  },
+  async sendAnyMail(
+    email: string,
+    text: string,
+    title: string = STANDART_TITLE,
+  ) {
+    try {
+      const layout = anyLayout(text);
+      const res = await this.send(email, layout, title);
+      return res;
+    } catch (error) {
+      throw Error;
+    }
   },
 };
 

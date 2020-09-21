@@ -1,7 +1,6 @@
 export interface IRealtor {
   email: string;
-  password: string;
-  passwordRepeat: string;
+  hashedPassword: string;
   agency: boolean;
   name: string;
   surname: string;
