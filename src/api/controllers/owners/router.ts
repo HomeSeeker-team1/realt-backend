@@ -1,20 +1,18 @@
 import { Router, Request, Response } from 'express';
 import { check, validationResult } from 'express-validator';
 import bcrypt from 'bcryptjs';
-import realtors from './controller';
-import mailer from '../../services/nodemailer.service';
-import owners from '../owners/controller';
+import owners from './controller';
+import realtors from '../realtors/controller';
 
 const router = Router();
 
 router.post(
-  '/realtors',
+  '/owners',
   [
     check('email', 'Некорректный email').isEmail(),
     check('password', 'Минимальная длина пароля 6 символов').isLength({
       min: 6,
     }),
-    check('agency', 'Выберите тип аккаунта').isBoolean(),
   ],
   async (req: Request, res: Response) => {
     try {
@@ -23,12 +21,10 @@ router.post(
       const {
         email,
         password,
-        agency,
         passwordRepeat,
         name,
         surname,
         patronymic,
-        phone,
       } = req.body;
 
       if (!errors.isEmpty()) {
@@ -52,8 +48,8 @@ router.post(
       }
 
       const isCandidateExist = await realtors.findCandidate(email);
-      const isRealtorExist = await realtors.findRealtor(email);
       const isOwnerExist = await owners.findOwner(email);
+      const isRealtorExist = await realtors.findRealtor(email);
 
       if (isCandidateExist) {
         allErrors.push({
@@ -68,7 +64,7 @@ router.post(
         });
       }
 
-      if (isRealtorExist || isOwnerExist) {
+      if (isOwnerExist || isRealtorExist) {
         allErrors.push({
           value: '',
           msg: 'Пользователь с таким email уже зарегистрирован.',
@@ -83,20 +79,16 @@ router.post(
 
       const hashedPassword = await bcrypt.hash(password, 12);
 
-      await realtors.createCandidate({
+      await owners.createOwner({
         email,
         hashedPassword,
-        agency,
-        phone,
         surname,
         patronymic,
         name,
       });
 
-      mailer.sendConfirm(email);
-
       return res.status(200).json({
-        message: 'Письмо с подтверждением регистрации отправлено на почту',
+        message: 'Пользователь успешно зарегистрирован',
       });
     } catch (error) {
       console.log('realtors router', error);
