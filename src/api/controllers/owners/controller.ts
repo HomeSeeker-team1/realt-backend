@@ -1,13 +1,20 @@
 import { v4 as uuidv4 } from 'uuid';
-import { IOwner } from '../../../models/owner';
+import bcrypt from 'bcryptjs';
+
+import { IOwner } from '../../../interfaces/owner';
 import databaseSqlQuery from '../../database-utils';
+import Owner from '../../models/owner';
 
 const owners = {
-  createOwner: async ({ email, hashedPassword }: IOwner) => {
+  createOwner: async (newOwner: IOwner) => {
     try {
       const id = uuidv4();
-      const query = `Insert into owners(id, email, password) Values ('${id}', '${email}', '${hashedPassword}')`;
+      const hashedPassword = await bcrypt.hash(newOwner.password, 12);
+      const owner = new Owner(newOwner, hashedPassword);
+      const newOwnerJSON = JSON.stringify(owner);
+      const query = `INSERT INTO owners (id, data) VALUES ('${id}', '${newOwnerJSON}');`;
       const res = await databaseSqlQuery(query);
+
       if (res.rowCount === 1) {
         return id;
       }
@@ -18,7 +25,7 @@ const owners = {
   },
   findOwner: async (email: string) => {
     try {
-      const query = `select id from owners WHERE email = '${email}'`;
+      const query = `SELECT * FROM owners WHERE data ->> 'email' = '${email}'`;
       const res = await databaseSqlQuery(query);
       if (res.rowCount === 1) {
         const { id } = res.rows[0];

@@ -1,22 +1,20 @@
 import { Router, Request, Response } from 'express';
 import { check, validationResult } from 'express-validator';
+
 import mailConfirm from './controller';
-import realtors from '../realtors/controller';
-import mailer from '../../services/nodemailer.service';
+import mailer from '../../services/mail/nodemailer.service';
 
 const router = Router();
 
 router.get('/mailconfirm/:id', async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const isMatch = await mailConfirm.isExistCandidate(id);
+    const isConfirm = await mailConfirm.confirmMember(id);
 
-    if (isMatch) {
-      await realtors.transferCandidateToRealtors(id);
-
+    if (isConfirm) {
       return res
         .status(201)
-        .json({ message: 'Пользователь создан! => редирект на сайт' });
+        .json({ message: 'Email подтвержден! => редирект на сайт' });
     }
     return res.status(404).json({ message: 'Незарегистрированные данные' });
   } catch (error) {

@@ -1,52 +1,37 @@
 import { v4 as uuidv4 } from 'uuid';
-import { IRealtor } from '../../../models/realtor';
+import bcrypt from 'bcryptjs';
+
+import { IRealtor } from '../../../interfaces/realtor';
 import databaseSqlQuery from '../../database-utils';
+import Realtor from '../../models/realtor';
 
 const realtors = {
-  createCandidate: async ({ email, hashedPassword, agency }: IRealtor) => {
+  createRealtor: async (newRealtor: IRealtor) => {
     try {
+      const hashedPassword = await bcrypt.hash(newRealtor.password, 12);
       const id = uuidv4();
-      const query = `Insert into candidates(id, email, password, agency) Values ('${id}', '${email}', '${hashedPassword}', '${agency}')`;
+      const realtor = new Realtor(newRealtor, hashedPassword);
+      const newRealtorJSON = JSON.stringify(realtor);
+      const query = `INSERT INTO realtors (id, data) VALUES ('${id}', '${newRealtorJSON}');`;
       const res = await databaseSqlQuery(query);
       if (res.rowCount === 1) {
         return id;
       }
       throw Error;
     } catch (error) {
+      console.log('create realtor', error);
       throw Error;
     }
   },
-  findCandidate: async (email: string) => {
+  findRealtor: async (email: string) => {
     try {
-      const query = `select id from candidates WHERE email = '${email}'`;
+      const query = `SELECT id FROM realtors WHERE data ->> 'email' = '${email}'`;
       const res = await databaseSqlQuery(query);
       if (res.rowCount === 1) {
         const { id } = res.rows[0];
         return id;
       }
       return false;
-    } catch (error) {
-      throw Error;
-    }
-  },
-  findRealtor: async (email: string) => {
-    try {
-      const query = `select email from realtors WHERE email = '${email}'`;
-      const res = await databaseSqlQuery(query);
-      if (res.rowCount === 1) {
-        return true;
-      }
-      return false;
-    } catch (error) {
-      throw Error;
-    }
-  },
-  transferCandidateToRealtors: async (id: string) => {
-    try {
-      const copyCandidateToRealtor = `INSERT INTO realtors SELECT * FROM candidates WHERE id = '${id}'`;
-      const deleteCandidate = `DELETE FROM candidates WHERE id = '${id}'`;
-      await databaseSqlQuery(copyCandidateToRealtor);
-      await databaseSqlQuery(deleteCandidate);
     } catch (error) {
       throw Error;
     }

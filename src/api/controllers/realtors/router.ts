@@ -1,35 +1,21 @@
 import { Router, Request, Response } from 'express';
-import { check, validationResult } from 'express-validator';
-import bcrypt from 'bcryptjs';
+import { validationResult } from 'express-validator';
+
 import realtors from './controller';
-import mailer from '../../services/nodemailer.service';
+import mailer from '../../services/mail/nodemailer.service';
 import owners from '../owners/controller';
+import { validationRealtors } from '../../services/validation/validation';
 
 const router = Router();
 
 router.post(
   '/realtors',
-  [
-    check('email', 'Некорректный email').isEmail(),
-    check('password', 'Минимальная длина пароля 6 символов').isLength({
-      min: 6,
-    }),
-    check('agency', 'Выберите тип аккаунта').isBoolean(),
-  ],
+  validationRealtors,
   async (req: Request, res: Response) => {
     try {
       const errors = validationResult(req);
       const allErrors = errors.array();
-      const {
-        email,
-        password,
-        agency,
-        passwordRepeat,
-        name,
-        surname,
-        patronymic,
-        phone,
-      } = req.body;
+      const { email, password, passwordRepeat } = req.body;
 
       if (!errors.isEmpty()) {
         return res.status(400).json({
@@ -51,22 +37,8 @@ router.post(
         });
       }
 
-      const isCandidateExist = await realtors.findCandidate(email);
       const isRealtorExist = await realtors.findRealtor(email);
       const isOwnerExist = await owners.findOwner(email);
-
-      if (isCandidateExist) {
-        allErrors.push({
-          value: '',
-          msg: 'Пользователь с таким email уже пытался зарегистрироваться.',
-          param: 'email',
-          location: 'body',
-        });
-        return res.status(400).json({
-          errors: allErrors,
-          message: 'Некорректные данные при регистрации',
-        });
-      }
 
       if (isRealtorExist || isOwnerExist) {
         allErrors.push({
@@ -81,17 +53,7 @@ router.post(
         });
       }
 
-      const hashedPassword = await bcrypt.hash(password, 12);
-
-      await realtors.createCandidate({
-        email,
-        hashedPassword,
-        agency,
-        phone,
-        surname,
-        patronymic,
-        name,
-      });
+      await realtors.createRealtor(req.body);
 
       mailer.sendConfirm(email);
 
