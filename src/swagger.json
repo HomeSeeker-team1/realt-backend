@@ -140,9 +140,18 @@
         },
         "agency": {
           "type": "boolean"
+        },
+        "agencyname": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
         }
       },
-      "required": ["email", "password", "passwordRepeat", "agency"]
+      "required": ["email", "password", "passwordRepeat", "agency", "phone", "name", "surname"]
     },
     "Owner": {
       "properties": {
@@ -163,9 +172,12 @@
         },
         "patronymic": {
           "type": "string"
+        },
+        "phone": {
+          "type": "string"
         }
       },
-      "required": ["email", "password", "passwordRepeat"]
+      "required": ["email", "password", "passwordRepeat", "name", "surname", "phone"]
     },
     "Mail confirm": {
       "properties": {

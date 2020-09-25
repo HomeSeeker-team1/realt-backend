@@ -1,12 +1,14 @@
 import nodemailer from 'nodemailer';
 import config from 'config';
-import realtors from '../controllers/realtors/controller';
+
+import realtors from '../../controllers/realtors/controller';
+import owners from '../../controllers/owners/controller';
 import {
   confirmLayout,
   anyLayout,
   CONFIRM_TITLE,
   STANDART_TITLE,
-} from '../../constants/mail/confirmLayout';
+} from '../../../constants/mail/confirmLayout';
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -36,15 +38,16 @@ const mailer = {
   },
   async sendConfirm(email: string) {
     try {
-      const candidateId = await realtors.findCandidate(email);
-      if (!candidateId) {
+      const realtorId = await realtors.findRealtor(email);
+      const ownerId = await owners.findOwner(email);
+      if (!realtorId && !ownerId) {
         return false;
       }
 
       const domen = process.env.NODE_ENV === 'develop'
         ? config.get('mode.local.host')
         : config.get('mode.remote.host');
-      const url = `${domen}/mailconfirm/${candidateId}`;
+      const url = `${domen}/mail/mailconfirm/${realtorId || ownerId}`;
       const layout = confirmLayout(url);
 
       const res = await this.send(email, layout, CONFIRM_TITLE);
