@@ -1,6 +1,6 @@
-const members = {
-  owner: 'owner',
-  realtor: 'realtor',
+const MEMBERS = {
+  OWNER: 'owner',
+  REALTOR: 'realtor',
 };
 
-export default members;
+export default MEMBERS;

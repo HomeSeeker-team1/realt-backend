@@ -10,4 +10,5 @@ export interface IOwner {
   agencyName?: string;
   address?: string;
   site?: string;
+  type: string;
 }

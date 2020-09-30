@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 
 import { IOwner } from '../../../interfaces/owner';
 import databaseSqlQuery from '../../database-utils';
-import Owner from '../../models/owner';
+import Owner from '../../models/Owner';
 
 const owners = {
   createOwner: async (newOwner: IOwner) => {
@@ -23,14 +23,28 @@ const owners = {
       throw Error;
     }
   },
+
   findOwner: async (email: string) => {
     try {
       const query = `SELECT * FROM owners WHERE data ->> 'email' = '${email}'`;
       const res = await databaseSqlQuery(query);
       if (res.rowCount === 1) {
-        const { id } = res.rows[0];
-        return id;
+        return res.rows[0];
       }
+      return false;
+    } catch (error) {
+      throw Error;
+    }
+  },
+
+  findOwnerById: async (id: string) => {
+    try {
+      const query = `SELECT * FROM owners WHERE id = '${id}'`;
+      const res = await databaseSqlQuery(query);
+      if (res.rowCount === 1) {
+        return res.rows[0];
+      }
+
       return false;
     } catch (error) {
       throw Error;

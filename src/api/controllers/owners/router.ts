@@ -3,7 +3,7 @@ import { validationResult } from 'express-validator';
 
 import owners from './controller';
 import realtors from '../realtors/controller';
-import { validation } from '../../services/validation/validation';
+import { validation } from '../../middlewares/validation/validation';
 
 const router = Router();
 

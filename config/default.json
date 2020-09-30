@@ -4,8 +4,8 @@
       "host": "https://realt-backend.herokuapp.com"
     },
     "remote": {
-      "host": "http://localhost:5001"
+      "host": "http://localhost:5000"
     }
   },
-  "port": 5001
+  "port": 5000
 }

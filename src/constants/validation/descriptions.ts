@@ -1,4 +1,4 @@
-const validationText = {
+const VALIDATION_TEXT = {
   name: "Имя должно содержать буквы, может содержать пробелы и символы ' и -",
   surname:
     "Фамилия должна содержать буквы, может содержать пробелы и символы ' и -",
@@ -8,4 +8,4 @@ const validationText = {
   incorrectEmail: 'Некорректный email',
 };
 
-export default validationText;
+export default VALIDATION_TEXT;

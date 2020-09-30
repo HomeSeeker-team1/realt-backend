@@ -112,6 +112,52 @@
           }
         }
       }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "auth user, get token",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "auth",
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "refresh access token, get access token",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "auth",
+            "schema": {
+              "$ref": "#/definitions/Refresh"
+            }
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -200,6 +246,25 @@
         }
       },
       "required": ["email", "text"]
+    },
+    "Login": {
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": ["email", "password"]
+    },
+    "Refresh": {
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      },
+      "required": ["token"]
     }
   }
 }
