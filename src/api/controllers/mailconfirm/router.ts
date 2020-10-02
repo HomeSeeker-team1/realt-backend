@@ -3,6 +3,7 @@ import { check, validationResult } from 'express-validator';
 
 import mailConfirm from './controller';
 import mailer from '../../services/mail/nodemailer.service';
+import { validationMailText } from '../../middlewares/validation/validation';
 
 const router = Router();
 
@@ -56,12 +57,7 @@ router.post(
 
 router.post(
   '/send',
-  [
-    check('email', 'Некорректный email').isEmail(),
-    check('text', 'Текст отправки письма минимум 6 знаков').isLength({
-      min: 6,
-    }),
-  ],
+  validationMailText,
   async (req: Request, res: Response) => {
     try {
       const errors = validationResult(req);

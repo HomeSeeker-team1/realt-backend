@@ -5,11 +5,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 import JWT_CONFIG from '../../../constants/jwt/jwt';
 import { IOwner } from '../../../interfaces/owner';
+import { IRealtor } from '../../../interfaces/realtor';
 import databaseSqlQuery from '../../database-utils';
 
 interface ICandidate {
   id: string;
-  data: IOwner;
+  data: IOwner | IRealtor;
+  password: string;
 }
 
 const auth = {
@@ -17,10 +19,7 @@ const auth = {
     try {
       if (candidate) {
         const { password } = req.body;
-        const passwordResult = bcrypt.compareSync(
-          password,
-          candidate.data.password,
-        );
+        const passwordResult = bcrypt.compareSync(password, candidate.password);
 
         if (passwordResult) {
           const id = uuidv4();

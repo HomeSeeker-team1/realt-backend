@@ -22,9 +22,7 @@ class Realtor {
 
   private site: string | undefined;
 
-  private password: string | undefined;
-
-  constructor(newRealtor: IRealtor, hashedPassword: string | null = null) {
+  constructor(newRealtor: IRealtor) {
     this.email = newRealtor.email;
     this.name = newRealtor.name;
     this.surname = newRealtor.surname;
@@ -35,9 +33,6 @@ class Realtor {
     this.address = newRealtor.address;
     this.site = newRealtor.site;
     this.type = MEMBERS.REALTOR;
-    if (hashedPassword) {
-      this.password = hashedPassword;
-    }
   }
 }
 

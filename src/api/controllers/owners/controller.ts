@@ -10,9 +10,9 @@ const owners = {
     try {
       const id = uuidv4();
       const hashedPassword = await bcrypt.hash(newOwner.password, 12);
-      const owner = new Owner(newOwner, hashedPassword);
+      const owner = new Owner(newOwner);
       const newOwnerJSON = JSON.stringify(owner);
-      const query = `INSERT INTO owners (id, data) VALUES ('${id}', '${newOwnerJSON}');`;
+      const query = `INSERT INTO owners (id, data, password) VALUES ('${id}', '${newOwnerJSON}', '${hashedPassword}');`;
       const res = await databaseSqlQuery(query);
 
       if (res.rowCount === 1) {
@@ -45,6 +45,20 @@ const owners = {
         return res.rows[0];
       }
 
+      return false;
+    } catch (error) {
+      throw Error;
+    }
+  },
+
+  updateOwner: async (updatedData: IOwner, id: string) => {
+    try {
+      const updatedDataJson = JSON.stringify(updatedData);
+      const query = `UPDATE owners SET data = '${updatedDataJson}' WHERE id = '${id}'`;
+      const res = await databaseSqlQuery(query);
+      if (res.rowCount === 1) {
+        return true;
+      }
       return false;
     } catch (error) {
       throw Error;

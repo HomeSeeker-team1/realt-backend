@@ -14,21 +14,16 @@ class Owner {
 
   private active: boolean;
 
-  private password: string | undefined;
-
   private type: string;
 
-  constructor(newOwner: IOwner, hashedPassword: string | null = null) {
+  constructor(newOwner: IOwner) {
     this.email = newOwner.email;
     this.name = newOwner.name;
     this.surname = newOwner.surname;
     this.patronymic = newOwner.patronymic;
     this.phone = newOwner.phone;
-    this.active = false;
+    this.active = newOwner.active || false;
     this.type = MEMBERS.OWNER;
-    if (hashedPassword) {
-      this.password = hashedPassword;
-    }
   }
 }
 

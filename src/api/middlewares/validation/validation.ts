@@ -3,17 +3,20 @@ import { check } from 'express-validator';
 import VALIDATION_TEXT from '../../../constants/validation/descriptions';
 import regx from '../../../constants/validation/regExp';
 
-const validation = [
-  check('email', VALIDATION_TEXT.incorrectEmail).isEmail(),
-  check('password', VALIDATION_TEXT.password).isLength({
-    min: 6,
-  }),
-  check('name', VALIDATION_TEXT.name).matches(regx.name(), 'u'),
-  check('surname', VALIDATION_TEXT.surname).matches(regx.name(), 'u'),
+const nameValidation = [
+  check('name', VALIDATION_TEXT.name).matches(regx.name(), 'gm'),
+  check('surname', VALIDATION_TEXT.surname).matches(regx.name(), 'gm'),
   check('patronymic', VALIDATION_TEXT.patronymic).matches(
     regx.patronymic(),
-    'u',
+    'gm',
   ),
+];
+
+const validation = [
+  ...nameValidation,
+  check('email', VALIDATION_TEXT.incorrectEmail).isEmail(),
+  check('password', VALIDATION_TEXT.password).matches(regx.password(), 'g'),
+  check('phone', VALIDATION_TEXT.phone).matches(regx.phone(), ''),
 ];
 
 const validationRealtors = [
@@ -21,4 +24,24 @@ const validationRealtors = [
   check('agency', 'Выберите тип аккаунта').isBoolean(),
 ];
 
-export { validation, validationRealtors };
+const validationUpdateRealtors = [
+  ...nameValidation,
+  check('agency', 'Выберите тип аккаунта').isBoolean(),
+];
+
+const validationUpdateOwners = [...nameValidation];
+
+const validationMailText = [
+  check('email', 'Некорректный email').isEmail(),
+  check('text', VALIDATION_TEXT.text).matches(regx.text(), ''),
+  check('title', VALIDATION_TEXT.title).matches(regx.text(), ''),
+];
+
+export {
+  validation,
+  nameValidation,
+  validationRealtors,
+  validationUpdateRealtors,
+  validationUpdateOwners,
+  validationMailText,
+};

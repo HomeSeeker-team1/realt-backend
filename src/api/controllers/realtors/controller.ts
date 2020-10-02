@@ -10,16 +10,15 @@ const realtors = {
     try {
       const hashedPassword = await bcrypt.hash(newRealtor.password, 12);
       const id = uuidv4();
-      const realtor = new Realtor(newRealtor, hashedPassword);
+      const realtor = new Realtor(newRealtor);
       const newRealtorJSON = JSON.stringify(realtor);
-      const query = `INSERT INTO realtors (id, data) VALUES ('${id}', '${newRealtorJSON}');`;
+      const query = `INSERT INTO realtors (id, data, password) VALUES ('${id}', '${newRealtorJSON}', '${hashedPassword}');`;
       const res = await databaseSqlQuery(query);
       if (res.rowCount === 1) {
         return id;
       }
       throw Error;
     } catch (error) {
-      console.log(error);
       throw Error;
     }
   },
@@ -43,6 +42,20 @@ const realtors = {
       const res = await databaseSqlQuery(query);
       if (res.rowCount === 1) {
         return res.rows[0];
+      }
+      return false;
+    } catch (error) {
+      throw Error;
+    }
+  },
+
+  updateRealtor: async (updatedData: IRealtor, id: string) => {
+    try {
+      const updatedDataJson = JSON.stringify(updatedData);
+      const query = `UPDATE realtors SET data = '${updatedDataJson}' WHERE id = '${id}'`;
+      const res = await databaseSqlQuery(query);
+      if (res.rowCount === 1) {
+        return true;
       }
       return false;
     } catch (error) {
