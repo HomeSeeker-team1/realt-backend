@@ -43,6 +43,53 @@
             "description": "OK"
           }
         }
+      },
+      "get": {
+        "tags": ["realtors"],
+        "summary": "get realtor",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "description": "write access token here",
+            "type": "string"
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": ["realtors"],
+        "summary": "update realtor",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "description": "write access token here",
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "realtor",
+            "schema": {
+              "$ref": "#/definitions/RealtorUpdate"
+            }
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/owners": {
@@ -55,6 +102,53 @@
             "name": "owner",
             "schema": {
               "$ref": "#/definitions/Owner"
+            }
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": ["owners"],
+        "summary": "get owner",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "description": "write access token here",
+            "type": "string"
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": ["owners"],
+        "summary": "update owner",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "description": "write access token here",
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "owner",
+            "schema": {
+              "$ref": "#/definitions/OwnerUpdate"
             }
           }
         ],
@@ -112,6 +206,52 @@
           }
         }
       }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "auth user, get token",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "auth",
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "refresh access token, get access token",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "auth",
+            "schema": {
+              "$ref": "#/definitions/Refresh"
+            }
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -153,6 +293,35 @@
       },
       "required": ["email", "password", "passwordRepeat", "agency", "phone", "name", "surname"]
     },
+    "RealtorUpdate": {
+      "properties": {
+        "phone": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "agency": {
+          "type": "boolean"
+        },
+        "agencyname": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        }
+      },
+      "required": ["agency", "phone", "name", "surname"]
+    },
     "Owner": {
       "properties": {
         "email": {
@@ -179,6 +348,23 @@
       },
       "required": ["email", "password", "passwordRepeat", "name", "surname", "phone"]
     },
+    "OwnerUpdate": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "surname", "phone"]
+    },
     "Mail confirm": {
       "properties": {
         "email": {
@@ -200,6 +386,25 @@
         }
       },
       "required": ["email", "text"]
+    },
+    "Login": {
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": ["email", "password"]
+    },
+    "Refresh": {
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      },
+      "required": ["token"]
     }
   }
 }

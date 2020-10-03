@@ -38,16 +38,17 @@ const mailer = {
   },
   async sendConfirm(email: string) {
     try {
-      const realtorId = await realtors.findRealtor(email);
-      const ownerId = await owners.findOwner(email);
-      if (!realtorId && !ownerId) {
+      const realtor = await realtors.findRealtor(email);
+      const owner = await owners.findOwner(email);
+      if (!realtor && !owner) {
         return false;
       }
 
       const domen = process.env.NODE_ENV === 'develop'
         ? config.get('mode.local.host')
         : config.get('mode.remote.host');
-      const url = `${domen}/mail/mailconfirm/${realtorId || ownerId}`;
+      const id = realtor.id || owner.id;
+      const url = `${domen}/mail/mailconfirm/${id}`;
       const layout = confirmLayout(url);
 
       const res = await this.send(email, layout, CONFIRM_TITLE);

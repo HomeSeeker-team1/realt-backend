@@ -1,4 +1,5 @@
 import { IOwner } from '../../interfaces/owner';
+import MEMBERS from '../../constants/members/members';
 
 class Owner {
   private email: string;
@@ -13,16 +14,16 @@ class Owner {
 
   private active: boolean;
 
-  private password: string;
+  private type: string;
 
-  constructor(newOwner: IOwner, hashedPassword: string) {
+  constructor(newOwner: IOwner) {
     this.email = newOwner.email;
-    this.password = hashedPassword;
     this.name = newOwner.name;
     this.surname = newOwner.surname;
     this.patronymic = newOwner.patronymic;
     this.phone = newOwner.phone;
-    this.active = false;
+    this.active = newOwner.active || false;
+    this.type = MEMBERS.OWNER;
   }
 }
 

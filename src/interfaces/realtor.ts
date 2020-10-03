@@ -10,4 +10,5 @@ export interface IRealtor {
   patronymic?: string;
   site?: string;
   agencyName?: string;
+  type: string;
 }

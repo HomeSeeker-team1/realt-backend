@@ -1,14 +1,18 @@
 import express, { Application } from 'express';
 import cors from 'cors';
+import passport from 'passport';
 import swaggerUi from 'swagger-ui-express';
 import config from 'config';
+
 import swaggerDocument from './swagger.json';
 import realtorsRouter from './api/controllers/realtors/router';
 import ownersRouter from './api/controllers/owners/router';
 import mailConfirmRouter from './api/controllers/mailconfirm/router';
+import authRouter from './api/controllers/auth/router';
 
 const app: Application = express();
 app.use(cors());
+app.use(passport.initialize());
 
 const port = process.env.PORT || config.get('port');
 
@@ -16,6 +20,7 @@ const port = process.env.PORT || config.get('port');
 app.use(express.json({ extended: true }));
 app.use('/', realtorsRouter);
 app.use('/', ownersRouter);
+app.use('/auth', authRouter);
 app.use('/mail', mailConfirmRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

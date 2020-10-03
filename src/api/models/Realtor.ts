@@ -1,4 +1,5 @@
 import { IRealtor } from '../../interfaces/realtor';
+import MEMBERS from '../../constants/members/members';
 
 class Realtor {
   private email: string;
@@ -11,7 +12,7 @@ class Realtor {
 
   private active: boolean;
 
-  private password: string;
+  private type: string;
 
   private patronymic: string | undefined;
 
@@ -21,17 +22,17 @@ class Realtor {
 
   private site: string | undefined;
 
-  constructor(newRealtor: IRealtor, hashedPassword: string) {
+  constructor(newRealtor: IRealtor) {
     this.email = newRealtor.email;
-    this.password = hashedPassword;
     this.name = newRealtor.name;
     this.surname = newRealtor.surname;
     this.phone = newRealtor.phone;
-    this.active = false;
+    this.active = newRealtor.active || false;
     this.patronymic = newRealtor.patronymic;
     this.agencyname = newRealtor.agencyName;
     this.address = newRealtor.address;
     this.site = newRealtor.site;
+    this.type = MEMBERS.REALTOR;
   }
 }
 
