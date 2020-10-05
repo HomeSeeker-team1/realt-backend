@@ -1,38 +1,43 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { v4 as uuidv4 } from 'uuid';
 
 import JWT_CONFIG from '../../../constants/jwt/jwt';
 import { IOwner } from '../../../interfaces/owner';
 import { IRealtor } from '../../../interfaces/realtor';
-import databaseSqlQuery from '../../database-utils';
+import THOUSAND_MILISECONDS from '../../../constants/time/time';
 
 const auth = {
   async login(req: Request, res: Response, candidate: IRealtor | IOwner) {
     try {
       if (candidate) {
         const { password } = req.body;
-        const passwordResult = bcrypt.compareSync(password, candidate.password);
+        const passwordResult = await bcrypt.compare(
+          password,
+          candidate.password,
+        );
+
+        const userId = candidate.id;
+        const userType = candidate.data.type;
 
         if (passwordResult) {
-          const id = uuidv4();
-          const refreshToken = jwt.sign(
-            {
-              userId: candidate.id,
-              id,
-            },
-            JWT_CONFIG.KEY,
-            { expiresIn: JWT_CONFIG.REFRESH_TOKEN_EXPIRES },
+          const refreshToken = await this.getToken(
+            userId,
+            userType,
+            JWT_CONFIG.REFRESH_TOKEN_EXPIRES,
           );
-          const accessToken = await this.getAccessToken(candidate.id);
-          const saveRefreshToken = `INSERT INTO tokens (id, token) VALUES ('${id}', '${refreshToken}');`;
-          await databaseSqlQuery(saveRefreshToken);
+          const accessToken = await this.getToken(
+            userId,
+            userType,
+            JWT_CONFIG.ACCESS_TOKEN_EXPIRES,
+          );
+
           return res.status(200).json({
             access_token: `Bearer ${accessToken}`,
             refresh_token: refreshToken,
-            expires_in: Date.now() + JWT_CONFIG.ACCESS_TOKEN_EXPIRES * 1000,
-            userId: candidate.id,
+            expires_in:
+              Date.now()
+              + JWT_CONFIG.ACCESS_TOKEN_EXPIRES * THOUSAND_MILISECONDS,
           });
         }
       }
@@ -48,26 +53,14 @@ const auth = {
     return decoded;
   },
 
-  async findToken(id: string) {
-    try {
-      const findTokenQuery = `SELECT id FROM tokens WHERE id = '${id}'`;
-      const res = await databaseSqlQuery(findTokenQuery);
-      if (res.rowCount === 1) {
-        return true;
-      }
-      return false;
-    } catch (error) {
-      throw new Error(error);
-    }
-  },
-
-  async getAccessToken(userId: string) {
+  async getToken(userId: string, userType: string, expirationTime: number) {
     const token = await jwt.sign(
       {
         userId,
+        userType,
       },
       JWT_CONFIG.KEY,
-      { expiresIn: JWT_CONFIG.ACCESS_TOKEN_EXPIRES },
+      { expiresIn: expirationTime },
     );
 
     return token;
