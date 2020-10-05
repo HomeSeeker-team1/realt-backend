@@ -89,7 +89,7 @@ router.get(
 
       if (!realtor) {
         return res.status(404).json({
-          message: 'Пользователь не найден',
+          message: 'Пользователь не авторизован',
         });
       }
 
@@ -131,7 +131,7 @@ router.put(
 
       if (!realtor) {
         return res.status(404).json({
-          message: 'Пользователь не найден',
+          message: 'Пользователь не авторизован',
         });
       }
       const updatedData = { ...realtor.data, ...req.body };
