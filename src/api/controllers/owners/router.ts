@@ -80,7 +80,7 @@ router.get(
       const owner = await owners.findOwnerById(userId);
 
       if (!owner) {
-        res.status(404).json({
+        return res.status(404).json({
           message: 'Пользователь не найден',
         });
       }
@@ -119,6 +119,13 @@ router.put(
       // @ts-ignore
       const { userId } = req.user;
       const owner = await owners.findOwnerById(userId);
+
+      if (!owner) {
+        return res.status(404).json({
+          message: 'Пользователь не найден',
+        });
+      }
+
       const updatedData = { ...owner.data, ...req.body };
       updatedData.email = owner.data.email;
       updatedData.phone = owner.data.phone;

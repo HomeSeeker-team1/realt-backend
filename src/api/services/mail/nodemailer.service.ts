@@ -36,6 +36,7 @@ const mailer = {
       throw Error;
     }
   },
+
   async sendConfirm(email: string) {
     try {
       const realtor = await realtors.findRealtor(email);
@@ -47,7 +48,15 @@ const mailer = {
       const domen = process.env.NODE_ENV === 'develop'
         ? config.get('mode.local.host')
         : config.get('mode.remote.host');
-      const id = realtor.id || owner.id;
+
+      let id;
+      if (owner) {
+        id = owner.id;
+      }
+      if (realtor) {
+        id = realtor.id;
+      }
+
       const url = `${domen}/mail/mailconfirm/${id}`;
       const layout = confirmLayout(url);
 
@@ -57,6 +66,7 @@ const mailer = {
       throw Error;
     }
   },
+
   async sendAnyMail(
     email: string,
     text: string,

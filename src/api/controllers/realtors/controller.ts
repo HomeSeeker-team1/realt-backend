@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
 
-import { IRealtor } from '../../../interfaces/realtor';
+import { IRealtor, IRealtorData } from '../../../interfaces/realtor';
 import databaseSqlQuery from '../../database-utils';
 import Realtor from '../../models/Realtor';
 
 const realtors = {
-  createRealtor: async (newRealtor: IRealtor) => {
+  createRealtor: async (newRealtor: IRealtorData): Promise<string | never> => {
     try {
       const hashedPassword = await bcrypt.hash(newRealtor.password, 12);
       const id = uuidv4();
@@ -19,11 +19,11 @@ const realtors = {
       }
       throw Error;
     } catch (error) {
-      throw Error;
+      throw new Error(error);
     }
   },
 
-  findRealtor: async (email: string) => {
+  findRealtor: async (email: string): Promise<false | IRealtor | never> => {
     try {
       const query = `SELECT * FROM realtors WHERE data ->> 'email' = '${email}'`;
       const res = await databaseSqlQuery(query);
@@ -32,11 +32,11 @@ const realtors = {
       }
       return false;
     } catch (error) {
-      throw Error;
+      throw new Error(error);
     }
   },
 
-  findRealtorById: async (id: string) => {
+  findRealtorById: async (id: string): Promise<false | IRealtor | never> => {
     try {
       const query = `SELECT * FROM realtors WHERE id = '${id}'`;
       const res = await databaseSqlQuery(query);
@@ -45,11 +45,14 @@ const realtors = {
       }
       return false;
     } catch (error) {
-      throw Error;
+      throw new Error(error);
     }
   },
 
-  updateRealtor: async (updatedData: IRealtor, id: string) => {
+  updateRealtor: async (
+    updatedData: IRealtorData,
+    id: string,
+  ): Promise<boolean | never> => {
     try {
       const updatedDataJson = JSON.stringify(updatedData);
       const query = `UPDATE realtors SET data = '${updatedDataJson}' WHERE id = '${id}'`;
@@ -59,7 +62,7 @@ const realtors = {
       }
       return false;
     } catch (error) {
-      throw Error;
+      throw new Error(error);
     }
   },
 };
