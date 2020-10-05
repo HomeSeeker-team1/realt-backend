@@ -8,14 +8,8 @@ import { IOwner } from '../../../interfaces/owner';
 import { IRealtor } from '../../../interfaces/realtor';
 import databaseSqlQuery from '../../database-utils';
 
-interface ICandidate {
-  id: string;
-  data: IOwner | IRealtor;
-  password: string;
-}
-
 const auth = {
-  async login(req: Request, res: Response, candidate: ICandidate) {
+  async login(req: Request, res: Response, candidate: IRealtor | IOwner) {
     try {
       if (candidate) {
         const { password } = req.body;

@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
 
-import { IOwner } from '../../../interfaces/owner';
+import { IOwner, IOwnerData } from '../../../interfaces/owner';
 import databaseSqlQuery from '../../database-utils';
 import Owner from '../../models/Owner';
 
 const owners = {
-  createOwner: async (newOwner: IOwner) => {
+  createOwner: async (newOwner: IOwnerData): Promise<string | never> => {
     try {
       const id = uuidv4();
       const hashedPassword = await bcrypt.hash(newOwner.password, 12);
@@ -20,11 +20,11 @@ const owners = {
       }
       throw Error;
     } catch (error) {
-      throw Error;
+      throw new Error(error);
     }
   },
 
-  findOwner: async (email: string) => {
+  findOwner: async (email: string): Promise<false | IOwner | never> => {
     try {
       const query = `SELECT * FROM owners WHERE data ->> 'email' = '${email}'`;
       const res = await databaseSqlQuery(query);
@@ -33,11 +33,11 @@ const owners = {
       }
       return false;
     } catch (error) {
-      throw Error;
+      throw new Error(error);
     }
   },
 
-  findOwnerById: async (id: string) => {
+  findOwnerById: async (id: string): Promise<false | IOwner | never> => {
     try {
       const query = `SELECT * FROM owners WHERE id = '${id}'`;
       const res = await databaseSqlQuery(query);
@@ -47,11 +47,14 @@ const owners = {
 
       return false;
     } catch (error) {
-      throw Error;
+      throw new Error(error);
     }
   },
 
-  updateOwner: async (updatedData: IOwner, id: string) => {
+  updateOwner: async (
+    updatedData: IOwnerData,
+    id: string,
+  ): Promise<boolean | never> => {
     try {
       const updatedDataJson = JSON.stringify(updatedData);
       const query = `UPDATE owners SET data = '${updatedDataJson}' WHERE id = '${id}'`;
@@ -61,7 +64,7 @@ const owners = {
       }
       return false;
     } catch (error) {
-      throw Error;
+      throw new Error(error);
     }
   },
 };

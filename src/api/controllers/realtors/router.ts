@@ -88,7 +88,7 @@ router.get(
       const realtor = await realtors.findRealtorById(userId);
 
       if (!realtor) {
-        res.status(404).json({
+        return res.status(404).json({
           message: 'Пользователь не найден',
         });
       }
@@ -128,6 +128,12 @@ router.put(
       // @ts-ignore
       const { userId } = req.user;
       const realtor = await realtors.findRealtorById(userId);
+
+      if (!realtor) {
+        return res.status(404).json({
+          message: 'Пользователь не найден',
+        });
+      }
       const updatedData = { ...realtor.data, ...req.body };
       updatedData.email = realtor.data.email;
       updatedData.phone = realtor.data.phone;

@@ -1,14 +1,15 @@
-export interface IRealtor {
-  email: string;
-  password: string;
-  phone: string;
+import { IUserData } from './user';
+
+export interface IRealtorData extends IUserData {
   agency: boolean;
-  name: string;
-  surname: string;
-  active: boolean;
   address?: string;
-  patronymic?: string;
   site?: string;
   agencyName?: string;
   type: string;
+}
+
+export interface IRealtor {
+  password: string;
+  readonly id: string;
+  data: IRealtorData;
 }

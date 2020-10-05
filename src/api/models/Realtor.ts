@@ -1,20 +1,9 @@
-import { IRealtor } from '../../interfaces/realtor';
+import { IRealtorData } from '../../interfaces/realtor';
 import MEMBERS from '../../constants/members/members';
+import User from './User';
 
-class Realtor {
-  private email: string;
-
-  private name: string;
-
-  private surname: string;
-
-  private phone: string;
-
-  private active: boolean;
-
+class Realtor extends User {
   private type: string;
-
-  private patronymic: string | undefined;
 
   private agencyname: string | undefined;
 
@@ -22,13 +11,8 @@ class Realtor {
 
   private site: string | undefined;
 
-  constructor(newRealtor: IRealtor) {
-    this.email = newRealtor.email;
-    this.name = newRealtor.name;
-    this.surname = newRealtor.surname;
-    this.phone = newRealtor.phone;
-    this.active = newRealtor.active || false;
-    this.patronymic = newRealtor.patronymic;
+  constructor(newRealtor: IRealtorData) {
+    super(newRealtor);
     this.agencyname = newRealtor.agencyName;
     this.address = newRealtor.address;
     this.site = newRealtor.site;
