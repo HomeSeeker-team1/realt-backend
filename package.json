@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon src/index.ts",
+    "dev": "cross-env NODE_ENV=development nodemon build/index.js",
     "start": "node build/index.js",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -47,12 +47,12 @@
     "express-jwt": "^6.0.0",
     "express-validator": "^6.6.1",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.20",
     "nodemailer": "^6.4.11",
-    "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0",
     "pg": "^8.3.3",
     "swagger-ui-express": "^4.1.4",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.0",
+    "validator": "^13.1.17"
   },
   "husky": {
     "hooks": {

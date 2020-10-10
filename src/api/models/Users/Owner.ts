@@ -1,5 +1,5 @@
-import { IOwnerData } from '../../interfaces/owner';
-import MEMBERS from '../../constants/members/members';
+import { IOwnerData } from '../../../interfaces/users/owner';
+import MEMBERS from '../../../constants/members/members';
 import User from './User';
 
 class Owner extends User {

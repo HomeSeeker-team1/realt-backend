@@ -9,7 +9,7 @@ import {
   validationUpdateOwners,
 } from '../../middlewares/validation/validation';
 import JWT_CONFIG from '../../../constants/jwt/jwt';
-import Owner from '../../models/Owner';
+import Owner from '../../models/Users/Owner';
 
 const router = Router();
 

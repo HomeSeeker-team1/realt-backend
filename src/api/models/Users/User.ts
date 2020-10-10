@@ -1,4 +1,4 @@
-import { IUserData } from '../../interfaces/user';
+import { IUserData } from '../../../interfaces/users/user';
 
 class User {
   private email: string;

@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
 
-import { IRealtor, IRealtorData } from '../../../interfaces/realtor';
+import { IRealtor, IRealtorData } from '../../../interfaces/users/realtor';
 import databaseSqlQuery from '../../database-utils';
-import Realtor from '../../models/Realtor';
+import Realtor from '../../models/Users/Realtor';
 
 const realtors = {
   createRealtor: async (newRealtor: IRealtorData): Promise<string | never> => {

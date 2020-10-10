@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
 
-import { IOwner, IOwnerData } from '../../../interfaces/owner';
+import { IOwner, IOwnerData } from '../../../interfaces/users/owner';
 import databaseSqlQuery from '../../database-utils';
-import Owner from '../../models/Owner';
+import Owner from '../../models/Users/Owner';
 
 const owners = {
   createOwner: async (newOwner: IOwnerData): Promise<string | never> => {

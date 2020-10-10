@@ -3,8 +3,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 import JWT_CONFIG from '../../../constants/jwt/jwt';
-import { IOwner } from '../../../interfaces/owner';
-import { IRealtor } from '../../../interfaces/realtor';
+import { IOwner } from '../../../interfaces/users/owner';
+import { IRealtor } from '../../../interfaces/users/realtor';
 import THOUSAND_MILISECONDS from '../../../constants/time/time';
 
 const auth = {

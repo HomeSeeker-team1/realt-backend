@@ -1,5 +1,5 @@
-import { IRealtorData } from '../../interfaces/realtor';
-import MEMBERS from '../../constants/members/members';
+import { IRealtorData } from '../../../interfaces/users/realtor';
+import MEMBERS from '../../../constants/members/members';
 import User from './User';
 
 class Realtor extends User {
