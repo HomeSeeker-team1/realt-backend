@@ -17,6 +17,10 @@
       "description": "owners"
     },
     {
+      "name": "auction",
+      "description": "auction"
+    },
+    {
       "name": "mail",
       "description": "mail"
     }
@@ -161,6 +165,109 @@
         }
       }
     },
+    "/auction": {
+      "post": {
+        "tags": ["auction"],
+        "summary": "create new auction",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "description": "write access token here",
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "auction",
+            "schema": {
+              "$ref": "#/definitions/Auction"
+            }
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": ["auction"],
+        "summary": "get auction",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "description": "write access token here",
+            "type": "string"
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": ["auction"],
+        "summary": "update auction",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "description": "write access token here",
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "auction",
+            "schema": {
+              "$ref": "#/definitions/Auction"
+            }
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["auction"],
+        "summary": "delete auction",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "description": "write access token here",
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "auction",
+            "schema": {
+              "$ref": "#/definitions/Auction Id"
+            }
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/mail/mailconfirm": {
       "post": {
         "tags": ["mail"],
@@ -291,7 +398,15 @@
           "type": "string"
         }
       },
-      "required": ["email", "password", "passwordRepeat", "agency", "phone", "name", "surname"]
+      "required": [
+        "email",
+        "password",
+        "passwordRepeat",
+        "agency",
+        "phone",
+        "name",
+        "surname"
+      ]
     },
     "RealtorUpdate": {
       "properties": {
@@ -346,7 +461,14 @@
           "type": "string"
         }
       },
-      "required": ["email", "password", "passwordRepeat", "name", "surname", "phone"]
+      "required": [
+        "email",
+        "password",
+        "passwordRepeat",
+        "name",
+        "surname",
+        "phone"
+      ]
     },
     "OwnerUpdate": {
       "properties": {
@@ -372,6 +494,112 @@
         }
       },
       "required": ["email"]
+    },
+    "Auction": {
+      "properties": {
+        "address": {
+          "type": "object",
+          "properties": {
+            "region": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "district": {
+              "type": "string"
+            },
+            "street": {
+              "type": "string"
+            },
+            "house": {
+              "type": "string"
+            },
+            "apartment": {
+              "type": "string"
+            }
+          }
+        },
+        "technicalSpec": {
+          "type": "object",
+          "properties": {
+            "area": {
+              "type": "number"
+            },
+            "balcony": {
+              "type": "number"
+            },
+            "isBalconyIncluded": {
+              "type": "boolean"
+            },
+            "rooms": {
+              "type": "number"
+            },
+            "kitchenArea": {
+              "type": "number"
+            },
+            "combinedBathroom": {
+              "type": "boolean"
+            },
+            "separateRooms": {
+              "type": "boolean"
+            },
+            "houseBuildYear": {
+              "type": "number"
+            },
+            "houseBuildingMaterial": {
+              "type": "string"
+            },
+            "floor": {
+              "type": "string"
+            },
+            "conditionOfTheApartment": {
+              "type": "string"
+            },
+            "landscapedHouse": {
+              "type": "boolean"
+            }
+          }
+        },
+        "legalIssues": {
+          "type": "object",
+          "properties": {
+            "yearsOfOwnership": {
+              "type": "number"
+            },
+            "owners": {
+              "type": "number"
+            },
+            "minorOwner": {
+              "type": "boolean"
+            },
+            "basisOfOwnership": {
+              "type": "string"
+            },
+            "encumbrances": {
+              "type": "string"
+            },
+            "debts": {
+              "type": "string"
+            },
+            "homePurpose": {
+              "type": "string"
+            }
+          }
+        },
+        "auctionId": {
+          "type": "string"
+        }
+      },
+      "required": ["address", "technicalSpec", "legalIssues"]
+    },
+    "Auction Id": {
+      "properties": {
+        "auctionId": {
+          "type": "string"
+        }
+      },
+      "required": ["auctionId"]
     },
     "Send mail": {
       "properties": {

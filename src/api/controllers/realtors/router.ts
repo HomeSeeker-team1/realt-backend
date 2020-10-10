@@ -10,7 +10,7 @@ import {
   validationUpdateRealtors,
 } from '../../middlewares/validation/validation';
 import JWT_CONFIG from '../../../constants/jwt/jwt';
-import Realtor from '../../models/Realtor';
+import Realtor from '../../models/Users/Realtor';
 
 const router = Router();
 
