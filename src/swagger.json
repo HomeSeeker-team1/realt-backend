@@ -1,11 +1,11 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "realt backend API",
+    "title": "localhost:5000",
     "description": "realt backend",
     "version": "1.0.0"
   },
-  "host": "localhost:5000",
+  "host": "realt-backend.herokuapp.com",
   "basePath": "",
   "tags": [
     {
@@ -29,7 +29,7 @@
       "description": "admins"
     }
   ],
-  "schemes": ["http"],
+  "schemes": ["https"],
   "paths": {
     "/realtors": {
       "post": {

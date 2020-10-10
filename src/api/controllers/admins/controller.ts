@@ -5,53 +5,30 @@ import { IAdmin, IAdminData } from '../../../interfaces/users/admin';
 import databaseSqlQuery from '../../database-utils';
 import Admin from '../../models/Admin';
 
-const isKeyOk = async (hashedKey: string) => {
-  const query = `SELECT * FROM keys WHERE 'hashedKey' = '${hashedKey}'`;
-  const res = await databaseSqlQuery(query);
-
-  const query2 = `SELECT expires_in From keys WHERE 'hashedKey' = '${hashedKey}'`;
-  const res2 = await databaseSqlQuery(query2);
-
-  const isValueOne = res.rowCount === 1;
-  const isKeyNotExpired = Date.now() < res2;
-
-  if (isValueOne && isKeyNotExpired) {
-    return true;
-  }
-  return false;
-};
-
 const admins = {
   createAdmin: async (newAdmin: IAdminData): Promise<string | never> => {
     try {
-      console.log('strt');
       const id = uuidv4();
       const hashedPassword = await bcrypt.hash(newAdmin.password, 12);
       if (!newAdmin.key) throw Error('отсутствует ключ');
-      const hashedKey = await bcrypt.hash(newAdmin.key, 12);
-
-      if (!isKeyOk(hashedKey)) throw Error('неправильный ключ');
+      // uncomment 16,  delete 17
+      // const hashedKey = await bcrypt.hash(newAdmin.key, 12);
+      const hashedKey = newAdmin.key;
 
       const admin = new Admin(newAdmin);
       const newAdminJSON = JSON.stringify(admin);
 
       const query = `INSERT INTO admins (id, data, password) VALUES ('${id}', '${newAdminJSON}', '${hashedPassword}');`;
       const res = await databaseSqlQuery(query);
-      console.log('res');
       if (res.rowCount !== 1) {
         throw Error(
           `ошибка по запросу INSERT INTO admins (id, data, password) VALUES ('${id}', '${newAdminJSON}', '${hashedPassword}');`,
         );
       }
-      console.log(res);
 
-      const query2 = `DELETE * FROM keys WHERE 'hashedKey' = '${hashedKey}';`;
-      const res2 = await databaseSqlQuery(query2);
-      if (res2.rowCount !== 1) {
-        throw Error(
-          `ошибка по запросу DELETE * FROM keys WHERE "hashedKey" = "${hashedKey}";`,
-        );
-      }
+      const query2 = `DELETE FROM keys WHERE key = '${hashedKey}';`;
+      await databaseSqlQuery(query2);
+
       return id;
     } catch (error) {
       throw new Error('asd');

@@ -8,6 +8,7 @@ const VALIDATION_TEXT = {
   incorrectEmail: 'Некорректный email',
   text: 'Письмо не может быть пустым',
   title: 'Заголовок письма не может быть пустым',
+  keyRequired: 'ввести ключ',
 };
 
 export default VALIDATION_TEXT;

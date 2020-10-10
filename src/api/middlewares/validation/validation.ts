@@ -31,6 +31,11 @@ const validationUpdateRealtors = [
 
 const validationUpdateOwners = [...nameValidation];
 
+const validationAdmins = [
+  ...nameValidation,
+  check('key', VALIDATION_TEXT.keyRequired).exists(),
+];
+
 const validationUpdateAdmins = [...nameValidation];
 
 const validationMailText = [
@@ -45,6 +50,7 @@ export {
   validationRealtors,
   validationUpdateRealtors,
   validationUpdateOwners,
+  validationAdmins,
   validationUpdateAdmins,
   validationMailText,
 };
