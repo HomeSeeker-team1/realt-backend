@@ -52,7 +52,7 @@ const admins = {
 
       return id;
     } catch (error) {
-      throw new Error(error);
+      throw new Error('asd');
     }
   },
 

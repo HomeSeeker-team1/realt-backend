@@ -169,7 +169,7 @@
         }
       }
     },
-    "/admin": {
+    "/admins": {
       "post": {
         "tags": ["admins"],
         "summary": "create new admin",
