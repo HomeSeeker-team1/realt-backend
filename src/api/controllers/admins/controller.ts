@@ -24,23 +24,26 @@ const isKeyOk = async (hashedKey: string) => {
 const admins = {
   createAdmin: async (newAdmin: IAdminData): Promise<string | never> => {
     try {
+      console.log('strt');
       const id = uuidv4();
       const hashedPassword = await bcrypt.hash(newAdmin.password, 12);
       if (!newAdmin.key) throw Error('отсутствует ключ');
       const hashedKey = await bcrypt.hash(newAdmin.key, 12);
 
-      if (!isKeyOk(hashedKey)) throw Error;
+      if (!isKeyOk(hashedKey)) throw Error('неправильный ключ');
 
       const admin = new Admin(newAdmin);
       const newAdminJSON = JSON.stringify(admin);
 
       const query = `INSERT INTO admins (id, data, password) VALUES ('${id}', '${newAdminJSON}', '${hashedPassword}');`;
       const res = await databaseSqlQuery(query);
+      console.log('res');
       if (res.rowCount !== 1) {
         throw Error(
           `ошибка по запросу INSERT INTO admins (id, data, password) VALUES ('${id}', '${newAdminJSON}', '${hashedPassword}');`,
         );
       }
+      console.log(res);
 
       const query2 = `DELETE * FROM keys WHERE 'hashedKey' = '${hashedKey}';`;
       const res2 = await databaseSqlQuery(query2);
@@ -49,7 +52,6 @@ const admins = {
           `ошибка по запросу DELETE * FROM keys WHERE "hashedKey" = "${hashedKey}";`,
         );
       }
-
       return id;
     } catch (error) {
       throw new Error('asd');

@@ -5,7 +5,7 @@
     "description": "realt backend",
     "version": "1.0.0"
   },
-  "host": "realt-backend.herokuapp.com",
+  "host": "localhost:5000",
   "basePath": "",
   "tags": [
     {
@@ -29,7 +29,7 @@
       "description": "admins"
     }
   ],
-  "schemes": ["https"],
+  "schemes": ["http"],
   "paths": {
     "/realtors": {
       "post": {
