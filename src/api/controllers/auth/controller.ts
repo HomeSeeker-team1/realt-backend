@@ -5,10 +5,15 @@ import jwt from 'jsonwebtoken';
 import JWT_CONFIG from '../../../constants/jwt/jwt';
 import { IOwner } from '../../../interfaces/users/owner';
 import { IRealtor } from '../../../interfaces/users/realtor';
+import { IAdmin } from '../../../interfaces/users/admin';
 import THOUSAND_MILISECONDS from '../../../constants/time/time';
 
 const auth = {
-  async login(req: Request, res: Response, candidate: IRealtor | IOwner) {
+  async login(
+    req: Request,
+    res: Response,
+    candidate: IRealtor | IOwner | IAdmin,
+  ) {
     try {
       if (candidate) {
         const { password } = req.body;

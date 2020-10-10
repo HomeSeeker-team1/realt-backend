@@ -1,20 +1,19 @@
 import owners from '../../controllers/owners/controller';
 import realtors from '../../controllers/realtors/controller';
+import admins from '../../controllers/admins/controller';
 
 const findAnyUserByEmail = async (email: string) => {
-  let candidate = await owners.findOwner(email);
-  if (!candidate) {
-    candidate = await realtors.findRealtor(email);
-  }
+  const candidate = (await owners.findOwner(email))
+    || (await realtors.findRealtor(email))
+    || (await admins.findAdmin(email));
 
   return candidate;
 };
 
 const findAnyUserById = async (id: string) => {
-  let candidate = await owners.findOwnerById(id);
-  if (!candidate) {
-    candidate = await realtors.findRealtorById(id);
-  }
+  const candidate = (await owners.findOwnerById(id))
+    || (await realtors.findRealtorById(id))
+    || (await admins.findAdminById(id));
 
   return candidate;
 };

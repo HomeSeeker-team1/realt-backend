@@ -4,7 +4,7 @@ import jwt from 'express-jwt';
 
 import realtors from './controller';
 import mailer from '../../services/mail/nodemailer.service';
-import owners from '../owners/controller';
+import { findAnyUserByEmail } from '../../helpers/database-requests/findAnyUser';
 import {
   validationRealtors,
   validationUpdateRealtors,
@@ -43,10 +43,9 @@ router.post(
         });
       }
 
-      const isRealtorExist = await realtors.findRealtor(email);
-      const isOwnerExist = await owners.findOwner(email);
+      const isUserExist = await findAnyUserByEmail(email);
 
-      if (isRealtorExist || isOwnerExist) {
+      if (isUserExist) {
         allErrors.push({
           value: '',
           msg: 'Пользователь с таким email уже зарегистрирован.',

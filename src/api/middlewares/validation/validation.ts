@@ -31,6 +31,8 @@ const validationUpdateRealtors = [
 
 const validationUpdateOwners = [...nameValidation];
 
+const validationUpdateAdmins = [...nameValidation];
+
 const validationMailText = [
   check('email', 'Некорректный email').isEmail(),
   check('text', VALIDATION_TEXT.text).matches(regx.text(), ''),
@@ -43,5 +45,6 @@ export {
   validationRealtors,
   validationUpdateRealtors,
   validationUpdateOwners,
+  validationUpdateAdmins,
   validationMailText,
 };

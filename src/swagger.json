@@ -23,6 +23,10 @@
     {
       "name": "mail",
       "description": "mail"
+    },
+    {
+      "name": "admins",
+      "description": "admins"
     }
   ],
   "schemes": ["https"],
@@ -153,6 +157,75 @@
             "name": "owner",
             "schema": {
               "$ref": "#/definitions/OwnerUpdate"
+            }
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/admin": {
+      "post": {
+        "tags": ["admins"],
+        "summary": "create new admin",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "admin",
+            "schema": {
+              "$ref": "#/definitions/AdminWithKey"
+            }
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": ["admins"],
+        "summary": "get admin",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "description": "write access token here",
+            "type": "string"
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "put": {
+        "tags": ["admins"],
+        "summary": "update admin",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "description": "write access token here",
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "admin",
+            "schema": {
+              "$ref": "#/definitions/AdminUpdate"
             }
           }
         ],
@@ -471,6 +544,52 @@
       ]
     },
     "OwnerUpdate": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "surname", "phone"]
+    },
+    "AdminWithKey": {
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "passwordRepeat": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "patronymic": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        }
+      },
+      "required": ["email", "password", "passwordRepeat", "name", "surname", "phone", "key"]
+    },
+    "AdminUpdate": {
       "properties": {
         "name": {
           "type": "string"
