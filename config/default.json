@@ -1,0 +1,11 @@
+{
+  "mode": {
+    "local": {
+      "host": "https://realt-backend.herokuapp.com"
+    },
+    "remote": {
+      "host": "http://localhost:5000"
+    }
+  },
+  "port": 5000
+}

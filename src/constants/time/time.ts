@@ -1,0 +1,3 @@
+const THOUSAND_MILISECONDS = 1000;
+
+export default THOUSAND_MILISECONDS;
