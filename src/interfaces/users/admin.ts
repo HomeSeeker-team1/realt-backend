@@ -1,8 +1,13 @@
 import { IUserData } from './user';
 
+interface IKeyDataCandidate {
+  key: string;
+  id: string;
+}
+
 export interface IAdminData extends IUserData {
   type: string;
-  key?: string;
+  keyDataCandidate?: IKeyDataCandidate;
 }
 
 export interface IAdmin {

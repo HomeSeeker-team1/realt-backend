@@ -26,9 +26,9 @@ router.post(
         });
       }
 
-      const candidate = await findAnyUserByEmail(req.body.email);
-      if (candidate) {
-        return auth.login(req, res, candidate);
+      const user = await findAnyUserByEmail(req.body.email);
+      if (user) {
+        return auth.login(req, res, user);
       }
       return res.status(404).json({ message: 'Пользователь не найден' });
     } catch (error) {

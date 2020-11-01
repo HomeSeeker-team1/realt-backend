@@ -33,7 +33,7 @@ const validationUpdateOwners = [...nameValidation];
 
 const validationAdmins = [
   ...nameValidation,
-  check('key', VALIDATION_TEXT.keyRequired).exists(),
+  check('keyDataCandidate', VALIDATION_TEXT.keyRequired).exists(),
 ];
 
 const validationUpdateAdmins = [...nameValidation];

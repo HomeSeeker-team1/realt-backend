@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
+import { Request } from 'express';
 
 import { IAdmin, IAdminData } from '../../../interfaces/users/admin';
 import databaseSqlQuery from '../../database-utils';
@@ -10,10 +11,8 @@ const admins = {
     try {
       const id = uuidv4();
       const hashedPassword = await bcrypt.hash(newAdmin.password, 12);
-      if (!newAdmin.key) throw Error('отсутствует ключ');
-      // uncomment 16,  delete 17
-      // const hashedKey = await bcrypt.hash(newAdmin.key, 12);
-      const hashedKey = newAdmin.key;
+      if (!newAdmin.keyDataCandidate) throw Error('отсутствует ключ');
+      const keyId = newAdmin.keyDataCandidate.id;
 
       const admin = new Admin(newAdmin);
       const newAdminJSON = JSON.stringify(admin);
@@ -26,7 +25,7 @@ const admins = {
         );
       }
 
-      const query2 = `DELETE FROM keys WHERE key = '${hashedKey}';`;
+      const query2 = `DELETE FROM keys WHERE id = '${keyId}';`;
       await databaseSqlQuery(query2);
 
       return id;
@@ -74,6 +73,28 @@ const admins = {
         return true;
       }
       return false;
+    } catch (error) {
+      throw new Error(error);
+    }
+  },
+
+  isKeyOk: async (req: Request): Promise<boolean> => {
+    try {
+      const { keyDataCandidate } = req.body;
+
+      const dbQuery1 = `SELECT * FROM keys WHERE id = '${keyDataCandidate.id}'`;
+      const dbRes = await databaseSqlQuery(dbQuery1);
+
+      if (dbRes.rowCount !== 1) {
+        return false;
+      }
+      const keyInDB = dbRes.rows[0];
+      const isCorrectKey = await bcrypt.compare(
+        keyDataCandidate.key,
+        keyInDB.key,
+      );
+
+      return isCorrectKey;
     } catch (error) {
       throw new Error(error);
     }

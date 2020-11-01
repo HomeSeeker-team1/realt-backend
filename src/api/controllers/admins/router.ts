@@ -5,7 +5,6 @@ import jwt from 'express-jwt';
 import admins from './controller';
 
 import { findAnyUserByEmail } from '../../helpers/database-requests/findAnyUser';
-import isKeyOk from './isKeyOk';
 
 import {
   validationAdmins,
@@ -19,9 +18,16 @@ const router = Router();
 router.post(
   '/admins',
   validationAdmins,
-  isKeyOk,
   async (req: Request, res: Response) => {
     try {
+      const isValidKey = await admins.isKeyOk(req);
+
+      if (!isValidKey) {
+        return res.status(400).json({
+          message: 'Неправильный ключ',
+        });
+      }
+
       const errors = validationResult(req);
       const allErrors = errors.array();
       const { email, password, passwordRepeat } = req.body;

@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "localhost:5000",
+    "title": "realt backend api",
     "description": "realt backend",
     "version": "1.0.0"
   },
@@ -583,8 +583,16 @@
         "phone": {
           "type": "string"
         },
-        "key": {
-          "type": "string"
+        "keyDataCandidate": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            }
+          }
         }
       },
       "required": ["email", "password", "passwordRepeat", "name", "surname", "phone", "key"]
