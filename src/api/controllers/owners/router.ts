@@ -3,7 +3,9 @@ import { validationResult } from 'express-validator';
 import jwt from 'express-jwt';
 
 import owners from './controller';
-import realtors from '../realtors/controller';
+
+import { findAnyUserByEmail } from '../../helpers/database-requests/findAnyUser';
+
 import {
   validation,
   validationUpdateOwners,
@@ -39,10 +41,9 @@ router.post('/owners', validation, async (req: Request, res: Response) => {
       });
     }
 
-    const isOwnerExist = await owners.findOwner(email);
-    const isRealtorExist = await realtors.findRealtor(email);
+    const isUserExist = await findAnyUserByEmail(email);
 
-    if (isOwnerExist || isRealtorExist) {
+    if (isUserExist) {
       allErrors.push({
         value: '',
         msg: 'Пользователь с таким email уже зарегистрирован.',

@@ -2,23 +2,32 @@ import { Router, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import jwt from 'express-jwt';
 
-import realtors from './controller';
-import mailer from '../../services/mail/nodemailer.service';
+import admins from './controller';
+
 import { findAnyUserByEmail } from '../../helpers/database-requests/findAnyUser';
+
 import {
-  validationRealtors,
-  validationUpdateRealtors,
+  validationAdmins,
+  validationUpdateAdmins,
 } from '../../middlewares/validation/validation';
 import JWT_CONFIG from '../../../constants/jwt/jwt';
-import Realtor from '../../models/Users/Realtor';
+import Admin from '../../models/Admin';
 
 const router = Router();
 
 router.post(
-  '/realtors',
-  validationRealtors,
+  '/admins',
+  validationAdmins,
   async (req: Request, res: Response) => {
     try {
+      const isValidKey = await admins.isKeyOk(req);
+
+      if (!isValidKey) {
+        return res.status(400).json({
+          message: 'Неправильный ключ',
+        });
+      }
+
       const errors = validationResult(req);
       const allErrors = errors.array();
       const { email, password, passwordRepeat } = req.body;
@@ -58,22 +67,19 @@ router.post(
         });
       }
 
-      await realtors.createRealtor(req.body);
-
-      mailer.sendConfirm(email);
+      await admins.createAdmin(req.body);
 
       return res.status(200).json({
-        message: 'Письмо с подтверждением регистрации отправлено на почту',
+        message: 'Пользователь успешно зарегистрирован',
       });
     } catch (error) {
-      console.log(error);
       return res.status(500).json({ message: 'Server Error' });
     }
   },
 );
 
 router.get(
-  '/realtors',
+  '/admins',
   jwt({ secret: JWT_CONFIG.KEY, algorithms: ['HS256'] }),
   async (req: Request, res: Response) => {
     try {
@@ -83,28 +89,27 @@ router.get(
         });
       }
       // @ts-ignore
-      const { userId } = req.user;
-      const realtor = await realtors.findRealtorById(userId);
+      const { userId } = req.admin;
+      const admin = await admins.findAdminById(userId);
 
-      if (!realtor) {
+      if (!admin) {
         return res.status(404).json({
           message: 'Пользователь не авторизован',
         });
       }
 
-      const realtorData = new Realtor(realtor.data);
+      const adminData = new Admin(admin.data);
 
-      return res.status(200).json(realtorData);
+      return res.status(200).json(adminData);
     } catch (error) {
-      console.log(error);
       return res.status(500).json('Server Error');
     }
   },
 );
 
 router.put(
-  '/realtors',
-  validationUpdateRealtors,
+  '/admins',
+  validationUpdateAdmins,
   jwt({ secret: JWT_CONFIG.KEY, algorithms: ['HS256'] }),
   async (req: Request, res: Response) => {
     try {
@@ -126,22 +131,20 @@ router.put(
 
       // @ts-ignore
       const { userId } = req.user;
-      const realtor = await realtors.findRealtorById(userId);
+      const admin = await admins.findAdminById(userId);
 
-      if (!realtor) {
+      if (!admin) {
         return res.status(404).json({
           message: 'Пользователь не авторизован',
         });
       }
-      const updatedData = { ...realtor.data, ...req.body };
-      updatedData.email = realtor.data.email;
-      updatedData.phone = realtor.data.phone;
-      updatedData.active = realtor.data.active;
 
-      const databaseResponse = await realtors.updateRealtor(
-        updatedData,
-        userId,
-      );
+      const updatedData = { ...admin.data, ...req.body };
+      updatedData.email = admin.data.email;
+      updatedData.phone = admin.data.phone;
+      updatedData.active = admin.data.active;
+
+      const databaseResponse = await admins.updateAdmin(updatedData, userId);
       if (databaseResponse) {
         return res.status(200).json({
           message: 'Данные успешно изменены',
@@ -152,7 +155,6 @@ router.put(
         message: 'Данные не найдены',
       });
     } catch (error) {
-      console.log(error);
       throw Error;
     }
   },

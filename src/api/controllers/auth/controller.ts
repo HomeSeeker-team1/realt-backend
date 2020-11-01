@@ -5,20 +5,18 @@ import jwt from 'jsonwebtoken';
 import JWT_CONFIG from '../../../constants/jwt/jwt';
 import { IOwner } from '../../../interfaces/users/owner';
 import { IRealtor } from '../../../interfaces/users/realtor';
+import { IAdmin } from '../../../interfaces/users/admin';
 import THOUSAND_MILISECONDS from '../../../constants/time/time';
 
 const auth = {
-  async login(req: Request, res: Response, candidate: IRealtor | IOwner) {
+  async login(req: Request, res: Response, user: IRealtor | IOwner | IAdmin) {
     try {
-      if (candidate) {
+      if (user) {
         const { password } = req.body;
-        const passwordResult = await bcrypt.compare(
-          password,
-          candidate.password,
-        );
+        const passwordResult = await bcrypt.compare(password, user.password);
 
-        const userId = candidate.id;
-        const userType = candidate.data.type;
+        const userId = user.id;
+        const userType = user.data.type;
 
         if (passwordResult) {
           const refreshToken = await this.getToken(
