@@ -339,6 +339,33 @@
             "description": "OK"
           }
         }
+      },
+      "patch": {
+        "tags": ["auction"],
+        "summary": "start auction",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "description": "write access token here",
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "auction",
+            "schema": {
+              "$ref": "#/definitions/Auction Id"
+            }
+          }
+        ],
+        "description": "",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
       }
     },
     "/mail/mailconfirm": {
