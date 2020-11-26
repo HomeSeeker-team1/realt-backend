@@ -1,9 +1,9 @@
 import { Router, Request, Response } from 'express';
 import jwt from 'express-jwt';
 
-import JWT_CONFIG from '../../../constants/jwt/jwt';
-import MEMBERS from '../../../constants/members/members';
-import flatValidator from '../../helpers/auctionValidators/flatValidator';
+import JWT_CONFIG from '../../../../constants/jwt/jwt';
+import MEMBERS from '../../../../constants/members/members';
+import flatValidator from '../../../helpers/auctionValidators/flatValidator';
 import flats from './controller';
 
 const router = Router();

@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import { Request } from 'express';
 
 import { IAdmin, IAdminData } from '../../../interfaces/users/admin';
-import databaseSqlQuery from '../../database-utils';
+import databaseSqlQuery from '../../databaseUtils';
 import Admin from '../../models/Admin';
 
 const admins = {

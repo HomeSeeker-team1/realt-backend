@@ -1,4 +1,4 @@
-import databaseSqlQuery from '../../database-utils';
+import databaseSqlQuery from '../../databaseUtils';
 
 const mailConfirm = {
   async confirmMember(id: string) {

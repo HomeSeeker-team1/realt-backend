@@ -4,7 +4,7 @@ import jwt from 'express-jwt';
 
 import owners from './controller';
 
-import { findAnyUserByEmail } from '../../helpers/database-requests/findAnyUser';
+import { findAnyUserByEmail } from '../../helpers/databaseRequests/findAnyUser';
 
 import {
   validation,
@@ -15,7 +15,7 @@ import Owner from '../../models/Users/Owner';
 
 const router = Router();
 
-router.post('/owners', validation, async (req: Request, res: Response) => {
+router.post('/', validation, async (req: Request, res: Response) => {
   try {
     const errors = validationResult(req);
     const allErrors = errors.array();
@@ -67,7 +67,7 @@ router.post('/owners', validation, async (req: Request, res: Response) => {
 });
 
 router.get(
-  '/owners',
+  '/',
   jwt({ secret: JWT_CONFIG.KEY, algorithms: ['HS256'] }),
   async (req: Request, res: Response) => {
     try {
@@ -96,7 +96,7 @@ router.get(
 );
 
 router.put(
-  '/owners',
+  '/',
   validationUpdateOwners,
   jwt({ secret: JWT_CONFIG.KEY, algorithms: ['HS256'] }),
   async (req: Request, res: Response) => {

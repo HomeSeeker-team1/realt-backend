@@ -6,7 +6,7 @@ const router = Router();
 
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const auctions = activeAuctions.get();
+    const auctions = await activeAuctions.get();
     return res.status(200).json({
       auctions,
     });

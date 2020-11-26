@@ -1,15 +1,22 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { IFlat } from '../../../interfaces/auctions/flat';
-import databaseSqlQuery from '../../database-utils';
-import AUCTIONS_TYPES from '../../../constants/auction/auctionTypes';
-import AUCTIONS_TIMES from '../../../constants/auction/auctionTimes';
+import { IFlat } from '../../../../interfaces/auctions/flat';
+import databaseSqlQuery from '../../../databaseUtils';
+import AUCTIONS_TYPES from '../../../../constants/auction/auctionTypes';
+import AUCTIONS_TIMES from '../../../../constants/auction/auctionTimes';
 
 const flatDefaultAuctionData = {
   type: AUCTIONS_TYPES.FLAT,
-  isCheck: false,
+  isCheck: true,
   active: false,
   end: null,
+};
+
+const flatStartAuctionData = {
+  type: AUCTIONS_TYPES.FLAT,
+  isCheck: true,
+  active: true,
+  end: Date.now() + AUCTIONS_TIMES.PERIOD,
 };
 
 const flats = {
@@ -17,10 +24,10 @@ const flats = {
     try {
       const id = uuidv4();
       const data = JSON.stringify(flat);
-      const query = `INSERT INTO auctions (id, foreign_key, data, auction_data)
-      VALUES ('${id}', '${userId}', '${data}', '${flatDefaultAuctionData}';`;
+      const defaultAuctionData = JSON.stringify(flatDefaultAuctionData);
+      const query = `INSERT INTO auctions (id, owner_id, data, auction_data)
+      VALUES ('${id}', '${userId}', '${data}', '${defaultAuctionData}')`;
       const res = await databaseSqlQuery(query);
-
       return res.rowCount === 1;
     } catch (error) {
       throw new Error(error);
@@ -29,8 +36,8 @@ const flats = {
 
   async update(flat: IFlat, userId: string, auctionId: string) {
     const data = JSON.stringify(flat);
-    const query = `UPDATE auctions SET data = '${data}' AND auction_data = '${flatDefaultAuctionData}'
-     WHERE id = '${auctionId}' AND foreign_key = '${userId}';`;
+    const query = `UPDATE auctions SET data = '${data}'
+     WHERE id = '${auctionId}' AND owner_id = '${userId}';`;
     const res = await databaseSqlQuery(query);
 
     return res.rowCount === 1;
@@ -38,7 +45,7 @@ const flats = {
 
   async get(userId: string) {
     try {
-      const query = `select * from auctions WHERE foreign_key = '${userId}'`;
+      const query = `select * from auctions WHERE owner_id = '${userId}'`;
       const res = await databaseSqlQuery(query);
 
       return res.rows;
@@ -49,7 +56,7 @@ const flats = {
 
   async delete(userId: string, auctionId: string) {
     try {
-      const query = `DELETE FROM auctions WHERE id = '${auctionId}' AND foreign_key = '${userId}'; `;
+      const query = `DELETE FROM auctions WHERE id = '${auctionId}' AND owner_id = '${userId}'; `;
       const res = await databaseSqlQuery(query);
 
       return res.rowCount === 1;
@@ -60,14 +67,9 @@ const flats = {
 
   async start(userId: string, auctionId: string) {
     try {
-      const flatAuctionData = {
-        type: AUCTIONS_TYPES.FLAT,
-        isCheck: true,
-        active: true,
-        end: Date.now() + AUCTIONS_TIMES.PERIOD,
-      };
-      const query = `UPDATE auctions SET auction_data = '${flatAuctionData}'
-     WHERE id = '${auctionId}' AND foreign_key = '${userId}';`;
+      const startAuctionData = JSON.stringify(flatStartAuctionData);
+      const query = `UPDATE auctions SET auction_data = '${startAuctionData}'
+     WHERE id = '${auctionId}' AND owner_id = '${userId}';`;
       const res = await databaseSqlQuery(query);
 
       return res.rowCount === 1;

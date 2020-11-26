@@ -3,7 +3,7 @@ import { Router, Request, Response } from 'express';
 import { check, validationResult } from 'express-validator';
 import auth from './controller';
 import JWT_CONFIG from '../../../constants/jwt/jwt';
-import { findAnyUserByEmail } from '../../helpers/database-requests/findAnyUser';
+import { findAnyUserByEmail } from '../../helpers/databaseRequests/findAnyUser';
 import VALIDATION_TEXT from '../../../constants/validation/descriptions';
 import regx from '../../../constants/validation/regExp';
 import THOUSAND_MILISECONDS from '../../../constants/time/time';

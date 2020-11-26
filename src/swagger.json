@@ -17,16 +17,20 @@
       "description": "owners"
     },
     {
+      "name": "admins",
+      "description": "admins"
+    },
+    {
       "name": "auction",
       "description": "auction"
     },
     {
-      "name": "mail",
-      "description": "mail"
+      "name": "active auctions",
+      "description": "get active auctions"
     },
     {
-      "name": "admins",
-      "description": "admins"
+      "name": "mail",
+      "description": "mail"
     }
   ],
   "schemes": ["https"],
@@ -238,7 +242,7 @@
         }
       }
     },
-    "/auction": {
+    "/owners/auction": {
       "post": {
         "tags": ["auction"],
         "summary": "create new auction",
@@ -361,6 +365,20 @@
         ],
         "description": "",
         "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/active-auctions": {
+      "get": {
+        "tags": ["active auctions"],
+        "summary": "get active auctions",
+        "description": "",
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
         "responses": {
           "200": {
             "description": "OK"

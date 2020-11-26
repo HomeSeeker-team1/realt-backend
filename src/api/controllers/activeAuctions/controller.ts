@@ -1,9 +1,9 @@
-import databaseSqlQuery from '../../database-utils';
+import databaseSqlQuery from '../../databaseUtils';
 
 const activeAuctions = {
   async get() {
     try {
-      const query = 'SELECT * FROM auctions WHERE auction_data ->> \'active\' = \'true\'';
+      const query = "SELECT * FROM auctions WHERE auction_data ->> 'active' = 'true'";
       const res = await databaseSqlQuery(query);
 
       return res.rows;

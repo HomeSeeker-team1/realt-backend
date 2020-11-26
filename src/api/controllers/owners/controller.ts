@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
 
 import { IOwner, IOwnerData } from '../../../interfaces/users/owner';
-import databaseSqlQuery from '../../database-utils';
+import databaseSqlQuery from '../../databaseUtils';
 import Owner from '../../models/Users/Owner';
 
 const owners = {
