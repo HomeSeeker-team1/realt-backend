@@ -23,6 +23,7 @@
     "@types/passport-jwt": "^3.0.3",
     "@types/pg": "^7.14.4",
     "@types/puppeteer": "^5.4.0",
+    "@types/random-words": "^1.1.0",
     "@types/swagger-ui-express": "^4.1.2",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
@@ -41,22 +42,25 @@
     "typescript": "^4.0.2"
   },
   "dependencies": {
-    "@types/jsdom": "^16.2.5",
     "bcryptjs": "^2.4.3",
     "config": "^3.3.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
     "express-validator": "^6.6.1",
-    "jsdom": "^16.4.0",
+    "get-youtube-id": "^1.0.1",
+    "googleapis": "^65.0.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "nodemailer": "^6.4.11",
     "pg": "^8.3.3",
     "puppeteer": "^5.5.0",
+    "random-words": "^1.1.1",
     "swagger-ui-express": "^4.1.4",
     "uuid": "^8.3.0",
-    "validator": "^13.1.17"
+    "validator": "^13.1.17",
+    "youtube-captions-scraper": "^1.0.3",
+    "youtube-node": "^1.3.3"
   },
   "husky": {
     "hooks": {

@@ -14,5 +14,7 @@ module.exports = {
     'import/extensions': 'off',
     'import/no-unresolved': 'off',
     'no-unused-vars': 'off',
+    'no-await-in-loop': 'off',
+    'no-restricted-syntax': 'off',
   },
 };

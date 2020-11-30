@@ -29,7 +29,7 @@ const databaseSqlQuery = async (query: string) => {
     }
     await client.connect();
     const response = await client.query(query);
-    client.end();
+    await client.end();
     return response;
   } catch (error) {
     return error;

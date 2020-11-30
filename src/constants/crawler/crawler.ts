@@ -1,5 +1,7 @@
-const CRAWLER_URLS = {
-  YOUTUBE: 'https://youtube.com',
+const CRAWLER = {
+  URL: 'https://youtube.com',
+  TIMEOUT: 120000,
+  LINK_COUNTER: 100,
 };
 
-export default CRAWLER_URLS;
+export default CRAWLER;
