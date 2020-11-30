@@ -11,7 +11,6 @@ const getYoutubeSubtitles = async (videoId: string | null) => {
   } catch (error) {
     return null;
   }
-  // return subs.reduce((acum: any, text: any) => acum + text.text, '');
 };
 
 export default getYoutubeSubtitles;

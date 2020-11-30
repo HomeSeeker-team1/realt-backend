@@ -16,5 +16,6 @@ module.exports = {
     'no-unused-vars': 'off',
     'no-await-in-loop': 'off',
     'no-restricted-syntax': 'off',
+    camelcase: 'off',
   },
 };

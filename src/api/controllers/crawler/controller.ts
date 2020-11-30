@@ -5,6 +5,7 @@ import randomWord from 'random-words';
 import CRAWLER_CONSTANTS from '../../../constants/crawler/crawler';
 import getYoutubeSubtitles from '../../services/getYoutubeSubtitles';
 import databaseSqlQuery from '../../database-utils';
+import { ISubtitleData } from '../../../interfaces/subtitle/subtitle';
 
 const mouseMoveToSearchFieldAndMakeRequest = async (
   page: any,
@@ -41,8 +42,8 @@ const spinTheWheelAndGetVideoLinks = async (page: any) => {
 
 const getOver200Links = async (page: any, startTime: number): Promise<any> => {
   const links = await spinTheWheelAndGetVideoLinks(page);
-  console.log(links);
   const timeNow = Date.now();
+
   if (
     links.length < CRAWLER_CONSTANTS.LINK_COUNTER
     && timeNow < startTime + CRAWLER_CONSTANTS.TIMEOUT
@@ -55,13 +56,17 @@ const getOver200Links = async (page: any, startTime: number): Promise<any> => {
 
 const scrapeYoutubeVideoLinks = async (url: string) => {
   const startTime = Date.now();
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: true,
+  });
   const page = await browser.newPage();
   await page.setViewport({
     width: 1920,
     height: 1080,
   });
   await page.goto(url);
+
   await mouseMoveToSearchFieldAndMakeRequest(page, randomWord());
   const links = await getOver200Links(page, startTime);
 
@@ -69,6 +74,11 @@ const scrapeYoutubeVideoLinks = async (url: string) => {
 
   return links;
 };
+
+const getFilteredSubtitles = (subs: ISubtitleData[]) => subs.map((subtitleData: ISubtitleData) => ({
+  ...subtitleData,
+  text: subtitleData.text.replace(/[^a-zA-ZА-Яа-яЁё\s0-9\\-\\,\\.]/gi, ''),
+}));
 
 const crawler = {
   async run() {
@@ -81,23 +91,14 @@ const crawler = {
         const videoID: string | null = getYouTubeID(videoURL);
         const subtitles = await getYoutubeSubtitles(videoID);
         if (subtitles) {
-          const filteredSubtitles = subtitles.map((subtitleData: any) => {
-            const filteredData = {
-              ...subtitleData,
-              text: subtitleData.text.replace(
-                /[^a-zA-ZА-Яа-яЁё\s0-9\\-\\,\\.]/gi,
-                '',
-              ),
-            };
-
-            return filteredData;
-          });
-          const subtitlesJSON = JSON.stringify(filteredSubtitles);
-          const subtitlesAll = filteredSubtitles.reduce(
+          const subs = getFilteredSubtitles(subtitles);
+          const subtitlesJSON = JSON.stringify(subs);
+          const subtitlesAll = subs.reduce(
             (acum: any, text: any) => `${acum + text.text} `,
             '',
           );
           const subtitlesAllJSON = JSON.stringify(subtitlesAll);
+
           const query = `INSERT INTO youtube_subtitles (url, title, subtitles, subtitles_all) VALUES
           ('${videoURL}', '${title}', '${subtitlesJSON}', '${subtitlesAllJSON}');`;
           const res = await databaseSqlQuery(query);
