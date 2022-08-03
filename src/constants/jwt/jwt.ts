@@ -1,0 +1,7 @@
+const JWT_CONFIG = {
+  ACCESS_TOKEN_EXPIRES: 300,
+  REFRESH_TOKEN_EXPIRES: 2592000,
+  KEY: 'Sw3bfJw3ip',
+};
+
+export default JWT_CONFIG;
